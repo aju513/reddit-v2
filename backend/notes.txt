@@ -1,0 +1,4 @@
+jwt authentication
+login
+findbyid,findbyname
+
