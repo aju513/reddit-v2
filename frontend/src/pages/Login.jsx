@@ -1,24 +1,25 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import InputBox from './components/InputBox';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { UserContext } from '../utils/userContext';
 const Login = () => {
   const [value, setValue] = useState({});
-
+  const [serverError, setServerError] = useState('');
   const {
     register,
     handleSubmit,
-    setError,
+
     formState: { errors },
   } = useForm();
-
+  const { isLoggedIn, setIsLoggedIn, setUserName } = useContext(UserContext);
   axios.defaults.withCredentials = true;
   useEffect(() => {
-    handleChange();
+    callAxios();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
-  console.log(errors);
-  const handleChange = () => {
+
+  const callAxios = () => {
     console.log(value);
     axios
       .post(
@@ -33,22 +34,16 @@ const Login = () => {
       )
       .then(function (response) {
         console.log(response);
+        setUserName(response.data.username);
+        setServerError('');
+        console.log('login', response.data.isLoggedIn);
+        setIsLoggedIn(response.data.isLoggedIn);
+        console.log(isLoggedIn);
       })
       .catch(function (error) {
         console.log(error.response.data.errorType);
         if (error.response.data.errorType === 'email') {
-          console.log(error);
-          setError('emailServer', {
-            type: 'server',
-            message: error.response.data.error,
-          });
-        }
-        if (error.response.data.errorType === 'password') {
-          console.log(error);
-          setError('passwordServer', {
-            type: 'server',
-            message: error.response.data.error,
-          });
+          setServerError(error.response.data.error);
         }
       });
   };
@@ -56,16 +51,20 @@ const Login = () => {
   return (
     <div className="App">
       <form
-        onSubmit={handleSubmit((data) => {
+        onSubmit={handleSubmit((data, e) => {
           setValue(data);
         })}
       >
+        {serverError && <p>{serverError}</p>}
         <input
           {...register('email', { required: 'Emai should not be empty' })}
           type="text"
+          onChange={() => {
+            setServerError('');
+          }}
         />
         <p>{errors.email && <p>{errors.email.message}</p>}</p>
-        <p>{errors.emailServer && <p>{errors.emailServer.message}</p>}</p>
+
         <input
           {...register('password', {
             required: 'Password Should Not Be Empyty',
@@ -77,7 +76,7 @@ const Login = () => {
           type="password"
         />
         <p>{errors.password && <p>{errors.password.message}</p>}</p>
-        <p>{errors.passwordServer && <p>{errors.passwordServer.message}</p>}</p>
+
         <input value="input" type="submit" />
       </form>
     </div>

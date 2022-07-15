@@ -5,14 +5,28 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
 const register = (req, res) => {
+  console.log(req.body);
+
   const user = new User({
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password),
     username: req.body.username,
   });
   user.save();
+  const accessToken = jwt.sign(
+    { username: user.username, id: user._id },
+    'jwtsecretplschange'
+  );
 
-  res.send(req.body);
+  res.cookie('access-token', accessToken, {
+    maxAge: 60 * 60 * 24 * 30 * 1000,
+  });
+
+  res.send({
+    message: 'Register Successful',
+    isLoggedIn: true,
+    username: req.body.username,
+  });
 };
 
 const login = async (req, res, next) => {
@@ -23,12 +37,10 @@ const login = async (req, res, next) => {
       bcrypt.compare(req.body.password, userObj.password).then((match) => {
         if (!match) {
           console.log('userObj.password');
-          res
-            .status(404)
-            .send({
-              error: 'Wrong Username and Password Combination!',
-              errortype: 'Password',
-            });
+          res.status(404).send({
+            error: 'Wrong Username and Password Combination!',
+            errortype: 'Password',
+          });
         } else {
           console.log('working');
           const accessToken = jwt.sign(
@@ -39,7 +51,11 @@ const login = async (req, res, next) => {
           res.cookie('access-token', accessToken, {
             maxAge: 60 * 60 * 24 * 30 * 1000,
           });
-          res.send({ login: 'Login Successfull', username: userObj.username });
+          res.send({
+            login: 'Login Successfull',
+            username: userObj.username,
+            isLoggedIn: true,
+          });
         }
       });
     }

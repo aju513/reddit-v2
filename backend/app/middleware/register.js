@@ -3,10 +3,11 @@ const db = require('../models');
 const emailChecker = (req, res, next) => {
   db.user.findOne({ email: req.body.email }, function (err, obj) {
     if (err) {
-      res.send(err);
-    }
-    if (obj) {
-      res.send('already exist');
+      res.send({ error: 'dfhsdhf' });
+    } else if (obj) {
+      res
+        .status(401)
+        .send({ error: 'Email already exist', errorType: 'emailregister' });
     } else {
       next();
     }
@@ -14,12 +15,14 @@ const emailChecker = (req, res, next) => {
 };
 
 const usernameChecker = (req, res, next) => {
-  db.user.findOne({ password: req.body.password }, function (err, obj) {
+  db.user.findOne({ username: req.body.username }, function (err, obj) {
     if (err) {
       res.send(err);
-    }
-    if (obj) {
-      res.send('already exist');
+    } else if (obj) {
+      res.status(401).send({
+        error: 'Username already exist',
+        errorType: 'usernameregister',
+      });
     } else {
       next();
     }

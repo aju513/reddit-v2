@@ -30,7 +30,7 @@ const verifyJwt = (req, res, next) => {
   const accessToken = req.cookies['access-token'];
 
   if (!accessToken) {
-    res.status(400).send('NO login');
+    res.status(400).send({ isLoggedIn: false });
   }
 
   const validateToken = jwt.verify(accessToken, 'jwtsecretplschange');
@@ -38,7 +38,7 @@ const verifyJwt = (req, res, next) => {
     req.authenticated = true;
     next();
   } else {
-    res.send('not authenticated');
+    res.send({ isLoggedIn: false });
   }
 };
 module.exports = { verifyJwt, emailChecker, usernameChecker };
