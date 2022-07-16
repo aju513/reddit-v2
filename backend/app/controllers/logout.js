@@ -1,5 +1,5 @@
 const logout = (req, res) => {
-  res.clearCookie('access-token');
+  res.clearCookie('qid');
   res.send({ isLoggedIn: false });
 };
 module.exports = { logout };

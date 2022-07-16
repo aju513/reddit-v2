@@ -1,14 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 const Register = () => {
   const [value, setvalue] = useState({});
   const [errorFromServer, setErrorFromServer] = useState('');
+  const [status, setStatus] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
 
@@ -17,9 +18,14 @@ const Register = () => {
     if (Object.keys(value).length !== 0) {
       callAxios();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
-  console.log(errors);
+    const goToHomePage = () => navigate('/');
+
+    if (status) {
+      goToHomePage();
+    }
+    setStatus(false);
+    // eslint-disable-,statunext-line react-hooks/exhaustive-deps
+  }, [value, status]);
   const callAxios = () => {
     console.log(errors);
     axios
@@ -35,6 +41,9 @@ const Register = () => {
       )
       .then(function (response) {
         console.log(response);
+        if (response.status === 200) {
+          setStatus(true);
+        }
         setErrorFromServer('');
       })
       .catch(function (error) {
@@ -42,21 +51,6 @@ const Register = () => {
         if (error.response.data.error) {
           setErrorFromServer(error.response.data.error);
         }
-        // if (error.response.data.error) {
-        //   console.log(error.response.data.errorType);
-        //   setError('usernameRegister', {
-        //     type: 'custom',
-        //     message: 'Username or Email already taken',
-        //   });
-        // }
-
-        // if (error.response.data.errorType === 'emailregister') {
-        //   console.log(error);
-        //   setError('emailRegister', {
-        //     type: string,
-        //     message: error.response.data.error,
-        //   });
-        // }
       });
   };
 

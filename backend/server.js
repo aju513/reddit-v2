@@ -7,16 +7,25 @@ const cors = require('cors');
 const dbConfig = require('./app/config/db.config');
 const db = require('./app/models');
 const router = require('./app/routes/auth.routes');
-
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(cookieParser());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
-
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
+  );
+  next();
+});
 //connection
 
 mongoose
@@ -31,14 +40,6 @@ mongoose
     console.log('connection error', err);
   });
 
-app.use(function (req, res, next) {
-  res.header(
-    'Access-Control-Allow-Headers',
-    'x-access-token, Origin, Content-Type, Accept',
-    { 'Access-Control-Allow-Credentials': true }
-  );
-  next();
-});
 app.use('/api', router);
 
 app.listen(4000, () => {

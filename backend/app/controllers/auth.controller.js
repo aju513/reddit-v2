@@ -42,15 +42,15 @@ const login = async (req, res, next) => {
             errortype: 'Password',
           });
         } else {
-          console.log('working');
           const accessToken = jwt.sign(
             { username: userObj.username, id: userObj._id },
             'jwtsecretplschange'
           );
 
-          res.cookie('access-token', accessToken, {
+          res.cookie('qid', accessToken, {
             maxAge: 60 * 60 * 24 * 30 * 1000,
           });
+          console.log(req.cookies['qid']);
           res.send({
             login: 'Login Successfull',
             username: userObj.username,

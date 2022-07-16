@@ -1,19 +1,25 @@
-const jwt = require('jsonwebtoken');
+var jwt = require('jsonwebtoken');
 const { parseJwt } = require('../utils/parseJwt');
 
-const isLoggedIn = (req, res, next) => {
-  const accessToken = req.cookies['access-token'];
-
-  if (!accessToken) {
-    res.send({ isLoggedIn: false });
-  }
-
-  const validateToken = jwt.verify(accessToken, 'jwtsecretplschange');
-  const payload = parseJwt(accessToken);
-  if (validateToken) {
-    res.send({ isLoggedIn: true, payload: payload });
+const isLoggedIn = async (req, res, next) => {
+  console.log(req.headers.cookie);
+  console.log(req.cookies.cart);
+  const accessToken = req.cookies.qid;
+  console.log(accessToken);
+  if (accessToken === undefined) {
+    res.send({ isLoggedIn: false, username: '' });
   } else {
-    res.send({ isLoggedIn: false });
+    jwt.verify(accessToken, 'jwtsecretplschange', async (err, decodedToken) => {
+      if (err) {
+        console.log(err);
+
+        res.send({ isLoggedIn: false, usernmae: '' });
+      }
+      console.log(decodedToken);
+      let user = decodedToken;
+
+      res.send({ ...decodedToken, isLoggedIn: true });
+    });
   }
 };
 module.exports = { isLoggedIn };

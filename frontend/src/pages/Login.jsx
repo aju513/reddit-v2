@@ -1,23 +1,33 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../utils/userContext';
 const Login = () => {
+  axios.defaults.withCredentials = true;
+  ///
   const [value, setValue] = useState({});
   const [serverError, setServerError] = useState('');
+  const [status, setStatus] = useState(false);
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
-  const { isLoggedIn, setIsLoggedIn, setUserName } = useContext(UserContext);
-  axios.defaults.withCredentials = true;
+  const { setIsLoggedIn, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  ////
+
   useEffect(() => {
     callAxios();
+    const goToHomePage = () => navigate('/');
+    if (status) {
+      goToHomePage();
+    }
+    setStatus(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, status]);
 
   const callAxios = () => {
     console.log(value);
@@ -33,15 +43,14 @@ const Login = () => {
         }
       )
       .then(function (response) {
-        console.log(response);
-        setUserName(response.data.username);
+        setUser(response.data);
         setServerError('');
-        console.log('login', response.data.isLoggedIn);
         setIsLoggedIn(response.data.isLoggedIn);
-        console.log(isLoggedIn);
+        if (response.status === 200) {
+          setStatus(true);
+        }
       })
       .catch(function (error) {
-        console.log(error.response.data.errorType);
         if (error.response.data.errorType === 'email') {
           setServerError(error.response.data.error);
         }

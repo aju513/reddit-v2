@@ -10,13 +10,16 @@ import { Link, NavLink } from 'react-router-dom';
 import useIsLogged from '../utils/useIsLogged';
 import { UserContext } from '../utils/userContext';
 function Navbars() {
-  const { isLoggedIn, setIsLoggedIn, user, setUser, username } =
-    useContext(UserContext);
+  axios.defaults.withCredentials = true;
+  const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(UserContext);
 
-  const [bool, setBool] = useState(false);
+  const [bool, setBool] = useState(true);
+
   useEffect(() => {
-    checkIsLoggedIn();
-    setBool(false);
+    if (bool) {
+      checkIsLoggedIn();
+    }
+    console.log('isloggedin', isLoggedIn);
   }, []);
   const callLogout = () => {
     axios
@@ -33,10 +36,13 @@ function Navbars() {
     axios
       .get('http://localhost:4000/api/isLoggedIn')
       .then((data) => {
-        console.log(data.data);
-        setUser(data.data.payload);
+        console.log(data);
+
+        setUser(data.data);
         setIsLoggedIn(data.data.isLoggedIn);
+        setBool(false);
       })
+
       .catch((err) => {
         console.log(err);
       });
@@ -48,7 +54,7 @@ function Navbars() {
           <Nav.Item>
             <Nav.Link>
               <Link style={{ textDecoration: 'none' }} to="/ ">
-                {username}
+                {user.username ? user.username : '...loading'}
               </Link>
             </Nav.Link>
           </Nav.Item>
