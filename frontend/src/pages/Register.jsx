@@ -1,8 +1,11 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { UserContext } from '../utils/userContext';
 const Register = () => {
+  axios.defaults.withCredentials = true;
+  //
   const [value, setvalue] = useState({});
   const [errorFromServer, setErrorFromServer] = useState('');
   const [status, setStatus] = useState(false);
@@ -12,8 +15,9 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { user, setUser } = useContext(UserContext);
+  //
 
-  axios.defaults.withCredentials = true;
   useEffect(() => {
     if (Object.keys(value).length !== 0) {
       callAxios();
@@ -44,6 +48,7 @@ const Register = () => {
         if (response.status === 200) {
           setStatus(true);
         }
+        setUser(response.data.user);
         setErrorFromServer('');
       })
       .catch(function (error) {
@@ -55,7 +60,7 @@ const Register = () => {
   };
 
   return (
-    <div className="App">
+    <div className="App center">
       <form
         onSubmit={handleSubmit((data, e) => {
           e.preventDefault();
@@ -91,7 +96,7 @@ const Register = () => {
         />
         <p>{errors.password && <>{errors.password.message}</>}</p>
 
-        <input value="input" type="submit" form="register" />
+        <input value="Submit" type="submit" />
       </form>
     </div>
   );

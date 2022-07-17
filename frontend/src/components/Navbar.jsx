@@ -1,32 +1,20 @@
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/esm/Button';
-import { alignPropType } from 'react-bootstrap/esm/types';
+import { useContext, useEffect } from 'react';
 import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link, NavLink } from 'react-router-dom';
-import useIsLogged from '../utils/useIsLogged';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../utils/userContext';
 function Navbars() {
   axios.defaults.withCredentials = true;
-  const { isLoggedIn, setIsLoggedIn, user, setUser } = useContext(UserContext);
-
-  const [bool, setBool] = useState(true);
-
+  const { user, setUser } = useContext(UserContext);
+  console.log(user.username, user.isLoggedIn);
   useEffect(() => {
-    if (bool) {
-      checkIsLoggedIn();
-    }
-    console.log('isloggedin', isLoggedIn);
+    checkIsLoggedIn();
   }, []);
   const callLogout = () => {
     axios
       .get('http://localhost:4000/api/logout')
-      .then((data) => {
-        console.log(1);
-        setIsLoggedIn(data.isLoggedIn);
+      .then((response) => {
+        setUser(response.data.user);
       })
       .catch((err) => {
         console.log(err);
@@ -35,12 +23,8 @@ function Navbars() {
   const checkIsLoggedIn = () => {
     axios
       .get('http://localhost:4000/api/isLoggedIn')
-      .then((data) => {
-        console.log(data);
-
-        setUser(data.data);
-        setIsLoggedIn(data.data.isLoggedIn);
-        setBool(false);
+      .then((response) => {
+        setUser(response.data.user);
       })
 
       .catch((err) => {
@@ -49,7 +33,7 @@ function Navbars() {
   };
   return (
     <>
-      {isLoggedIn ? (
+      {user.isLoggedIn ? (
         <Nav className="justify-content-end">
           <Nav.Item>
             <Nav.Link>

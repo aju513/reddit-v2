@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../utils/userContext';
+import '../css/form.css';
 const Login = () => {
   axios.defaults.withCredentials = true;
   ///
@@ -14,7 +15,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { setIsLoggedIn, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   ////
 
@@ -43,9 +44,9 @@ const Login = () => {
         }
       )
       .then(function (response) {
-        setUser(response.data);
+        setUser(response.data.user);
         setServerError('');
-        setIsLoggedIn(response.data.isLoggedIn);
+
         if (response.status === 200) {
           setStatus(true);
         }
@@ -58,15 +59,16 @@ const Login = () => {
   };
 
   return (
-    <div className="App">
+    <div className="App center">
       <form
+        className="from_login"
         onSubmit={handleSubmit((data, e) => {
           setValue(data);
         })}
       >
         {serverError && <p>{serverError}</p>}
         <input
-          {...register('email', { required: 'Emai should not be empty' })}
+          {...register('email', { required: 'Email should not be empty' })}
           type="text"
           onChange={() => {
             setServerError('');
@@ -86,7 +88,7 @@ const Login = () => {
         />
         <p>{errors.password && <p>{errors.password.message}</p>}</p>
 
-        <input value="input" type="submit" />
+        <input value="Submit" type="submit" />
       </form>
     </div>
   );

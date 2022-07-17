@@ -7,18 +7,17 @@ const isLoggedIn = async (req, res, next) => {
   const accessToken = req.cookies.qid;
   console.log(accessToken);
   if (accessToken === undefined) {
-    res.send({ isLoggedIn: false, username: '' });
+    res.send({ user: { isLoggedIn: false, usernmae: null } });
   } else {
     jwt.verify(accessToken, 'jwtsecretplschange', async (err, decodedToken) => {
       if (err) {
         console.log(err);
 
-        res.send({ isLoggedIn: false, usernmae: '' });
+        res.send({ user: { isLoggedIn: false, usernmae: null } });
       }
       console.log(decodedToken);
-      let user = decodedToken;
 
-      res.send({ ...decodedToken, isLoggedIn: true });
+      res.send({ user: { username: decodedToken.username, isLoggedIn: true } });
     });
   }
 };

@@ -18,14 +18,16 @@ const register = (req, res) => {
     'jwtsecretplschange'
   );
 
-  res.cookie('access-token', accessToken, {
+  res.cookie('qid', accessToken, {
     maxAge: 60 * 60 * 24 * 30 * 1000,
   });
 
   res.send({
-    message: 'Register Successful',
-    isLoggedIn: true,
-    username: req.body.username,
+    user: {
+      username: req.body.username,
+      isLoggedIn: true,
+      message: 'Register Successful',
+    },
   });
 };
 
@@ -52,9 +54,11 @@ const login = async (req, res, next) => {
           });
           console.log(req.cookies['qid']);
           res.send({
-            login: 'Login Successfull',
-            username: userObj.username,
-            isLoggedIn: true,
+            user: {
+              username: userObj.username,
+              isLoggedIn: true,
+              message: 'Login Successfull',
+            },
           });
         }
       });
