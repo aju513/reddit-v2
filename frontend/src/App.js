@@ -12,11 +12,12 @@ import Navbars from './components/Navbar';
 import { useState } from 'react';
 import { UserContext } from './utils/userContext';
 import Home from './pages/Home';
+import Subreddit from './pages/Subreddit';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
-  const [username, setUserName] = useState('');
+  const [subreddit, setSubreddit] = useState([]);
   return (
     <div>
       <BrowserRouter>
@@ -26,8 +27,8 @@ function App() {
             setIsLoggedIn,
             user,
             setUser,
-            username,
-            setUserName,
+            subreddit,
+            setSubreddit,
           }}
         >
           <Navbars />
@@ -35,6 +36,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/subreddit" element={<Subreddit />} />
           </Routes>
         </UserContext.Provider>
       </BrowserRouter>

@@ -1,5 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import CreatePost from '../components/CreatePost';
+import Popup from '../components/Popop';
 import { UserContext } from '../utils/userContext';
 
 const Home = () => {
@@ -7,8 +9,8 @@ const Home = () => {
 
   return (
     <div>
+      <CreatePost />
       Home
-      <p>{user.message}</p>
     </div>
   );
 };

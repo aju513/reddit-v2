@@ -14,6 +14,7 @@ const Subreddit = mongoose.model(
         ref: 'User',
       },
     ],
+    post: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
   })
 );
 

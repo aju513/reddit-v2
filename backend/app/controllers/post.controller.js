@@ -3,28 +3,41 @@ const { parseJwt } = require('../utils/parseJwt');
 const db = require('../models');
 const Post = db.post;
 const User = db.user;
-
+const Subreddit = db.subreddit;
 const createPost = async (req, res) => {
-  const accessToken = req.cookies['access-token'];
+  //send request name for subreddit and username that is stored in userContext.
+  const accessToken = req.cookies.qid;
   const userId = parseJwt(accessToken).id;
+  Subreddit.findOne({ name: req.body.name }, (err, obj) => {
+    if (obj) {
+      const postByUser = new Post({
+        post: req.body.post,
+        user: {
+          _id: parseJwt(accessToken).id,
+        },
+        subreddit: { _id: obj._id },
+      });
+      postByUser.save();
+      User.findOneAndUpdate(
+        { username: req.body.username },
+        { $push: { post: postByUser._id } },
 
-  const postByUser = new Post({
-    post: req.body.post,
-    user: {
-      _id: parseJwt(accessToken).id,
-    },
+        (err) => {
+          if (err) throw err;
+        }
+      );
+      Subreddit.findOneAndUpdate(
+        { name: req.body.name },
+        { $push: { post: postByUser._id } },
+
+        (err) => {
+          if (err) throw err;
+        }
+      );
+    }
   });
-  postByUser.save();
 
   //pushed post inside the User Model
-  User.findOneAndUpdate(
-    { _id: userId },
-    { $push: { post: postByUser._id } },
-    { new: true, upsert: true },
-    function (err, userDocument) {
-      if (err) throw err;
-    }
-  );
 
   res.send(req.body);
 };

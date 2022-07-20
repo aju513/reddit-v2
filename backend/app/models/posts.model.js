@@ -8,6 +8,10 @@ const Post = mongoose.model(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    subreddit: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subreddit',
+    },
   })
 );
 

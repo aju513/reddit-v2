@@ -65,5 +65,10 @@ const login = async (req, res, next) => {
     }
   });
 };
-
-module.exports = { register, login };
+const logout = (req, res) => {
+  res.clearCookie('qid');
+  res.send({
+    user: { isLoggedIn: false, user: null, message: 'Logout Successful' },
+  });
+};
+module.exports = { register, login, logout };
