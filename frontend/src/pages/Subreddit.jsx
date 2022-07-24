@@ -3,15 +3,22 @@ import { Alert } from 'bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { UserContext } from '../utils/userContext';
-
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 const Subreddit = () => {
   axios.defaults.withCredentials = true;
   const [name, setName] = useState('');
   const { user } = useContext(UserContext);
-  useEffect(() => {}, []);
-  const createSubreddit = (e) => {
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+  useEffect(() => {
+    if (name.length !== 0) {
+      createSubreddit();
+    }
+  }, [name]);
+  const createSubreddit = () => {
     console.log('yes');
-    e.preventDefault();
+
     axios
       .post(
         'http://localhost:4000/api/subreddit',
@@ -23,24 +30,24 @@ const Subreddit = () => {
           },
         }
       )
-      .then(({ data }) => {
+      .then((response) => {
         // <Alert variant="success">{data.subreddit.message}</Alert>;
-        console.log('h');
+        console.log(response);
+        if (response.status === 200) {
+          ///need to make changes make separate page for your created subreddit page
+          navigate('/');
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const handleChange = (e) => {
-    e.preventDefault();
-    setName(e.target.value);
-  };
 
   return (
     <div>
-      <form onSubmit={(e) => createSubreddit(e)}>
+      <form onSubmit={handleSubmit((data) => setName(data.subredditname))}>
         <p>Name</p>
-        <input type="text" onClick={(e) => handleChange(e)} />
+        <input {...register('subredditname')} type="text" />
         <input type="submit" name="create" />
       </form>
     </div>

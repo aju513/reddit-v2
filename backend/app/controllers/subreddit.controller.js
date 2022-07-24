@@ -6,9 +6,7 @@ const { parseJwt } = require('../utils/parseJwt');
 
 const createSubreddit = async (req, res) => {
   const accessToken = req.cookies.qid;
-  console.log(accessToken);
   const userId = parseJwt(accessToken).id;
-  console.log(userId);
   const newSubreddit = new Subreddit({
     name: req.body.name,
     createdUser: {

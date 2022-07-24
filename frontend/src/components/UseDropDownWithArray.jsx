@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../utils/userContext';
 const UserDropDownWithArray = ({ main, properties }) => {
-  console.log(properties);
+  const { setCurrentSubreddit } = useContext(UserContext);
   return (
     <div>
       {' '}
@@ -13,7 +14,14 @@ const UserDropDownWithArray = ({ main, properties }) => {
 
         <Dropdown.Menu>
           {properties.map((object) => (
-            <Dropdown.Item>{object}</Dropdown.Item>
+            <Dropdown.Item
+              onClick={(e) => {
+                console.log(e.target.innerHTML);
+                setCurrentSubreddit(e.target.innerHTML);
+              }}
+            >
+              {object}
+            </Dropdown.Item>
           ))}
         </Dropdown.Menu>
       </Dropdown>

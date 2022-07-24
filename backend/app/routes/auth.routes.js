@@ -19,10 +19,7 @@ router.post(
 );
 router.get('/logout', auth.logout);
 //display routes
-router.get('/user', authJwt.verifyJwt, (req, res) => {
-  console.log(req.authenticated);
-  res.send('login');
-});
+router.get('/posts', post.getAllPost);
 router.post('/posts', post.createPost);
 router.get('/isLoggedIn', isLoggedIn);
 router.post('/subreddit', subreddit.createSubreddit);

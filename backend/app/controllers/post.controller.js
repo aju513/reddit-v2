@@ -11,7 +11,7 @@ const createPost = async (req, res) => {
   Subreddit.findOne({ name: req.body.name }, (err, obj) => {
     if (obj) {
       const postByUser = new Post({
-        post: req.body.post,
+        post: { title: req.body.post.title, content: req.body.post.content },
         user: {
           _id: parseJwt(accessToken).id,
         },
@@ -41,5 +41,19 @@ const createPost = async (req, res) => {
 
   res.send(req.body);
 };
-
-module.exports = { createPost };
+const getAllPost = (req, res) => {
+  console.log(req.query);
+  if (!req.query.current) {
+    Post.find({}, (err, obj) => {
+      res.send(obj);
+    });
+  } else if (req.query.current) {
+    Subreddit.find({ name: req.query.current })
+      .populate('post')
+      .exec((err, obj) => {
+        console.log(obj);
+        res.send(obj[0].post);
+      });
+  }
+};
+module.exports = { createPost, getAllPost };

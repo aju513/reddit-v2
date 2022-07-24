@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
-import useIsLogged from '../utils/useIsLogged';
+
 import { UserContext } from '../utils/userContext';
 import UserDropDownWithArray from './UseDropDownWithArray';
 import UserDropDown from './UserDropDown';
@@ -14,8 +14,10 @@ function Navbars() {
   console.log(user.username, user.isLoggedIn);
   useEffect(() => {
     checkIsLoggedIn();
-    callSubreddit();
   }, []);
+  useEffect(() => {
+    callSubreddit();
+  }, [user]);
 
   const callSubreddit = () => {
     axios

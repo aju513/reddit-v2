@@ -1,0 +1,3 @@
+post =just created a button which goes popup 
+popup=added title and text make sure it works
+navbar  =useeffect check that subreddit loads doesnot reload on double reload
