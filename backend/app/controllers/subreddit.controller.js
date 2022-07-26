@@ -5,10 +5,8 @@ const Subreddit = db.subreddit;
 const { parseJwt } = require('../utils/parseJwt');
 
 const createSubreddit = async (req, res) => {
-  const accessToken = req.cookies['access-token'];
-
+  const accessToken = req.cookies.qid;
   const userId = parseJwt(accessToken).id;
-
   const newSubreddit = new Subreddit({
     name: req.body.name,
     createdUser: {
@@ -24,14 +22,20 @@ const createSubreddit = async (req, res) => {
 
   User.findOneAndUpdate(
     { _id: userId },
-    { $push: newSubreddit._id },
-    { new: true, upsert: true },
+    { $push: { userJoinedSubReddit: newSubreddit._id } },
+
     (err) => {
       if (err) throw err;
     }
   );
 
-  res.send('subreddit created');
+  res.send({
+    subreddit: {
+      creator: req.body.username,
+      name: req.body.name,
+      message: 'Subredit Created Successfull',
+    },
+  });
 };
 
 module.exports = { createSubreddit };

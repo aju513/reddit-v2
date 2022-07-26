@@ -6,7 +6,7 @@ const {
   register,
 } = require('../middleware/');
 
-const { auth, post, subreddit, logout } = require('../controllers');
+const { auth, post, subreddit, user } = require('../controllers');
 const { isLoggedIn } = require('../middleware/isLoggedIn');
 
 //auth routes
@@ -17,19 +17,11 @@ router.post(
   register.usernameChecker,
   auth.register
 );
-router.get('/logout', logout);
+router.get('/logout', auth.logout);
 //display routes
-router.get('/user', authJwt.verifyJwt, (req, res) => {
-  console.log(req.authenticated);
-  res.send('login');
-});
-router.post('/posts', authJwt.verifyJwt, post.createPost);
+router.get('/posts', post.getAllPost);
+router.post('/posts', post.createPost);
 router.get('/isLoggedIn', isLoggedIn);
-router.post(
-  '/subreddit',
-  authJwt.verifyJwt,
-  subredditChecker.redditNameRepeatedChecker,
-  subreddit.createSubreddit
-);
-
+router.post('/subreddit', subreddit.createSubreddit);
+router.get('/userSubreddits', user.userJoinedSubreddit);
 module.exports = router;

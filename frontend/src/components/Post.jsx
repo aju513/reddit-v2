@@ -1,37 +1,23 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import InputBox from './components/InputBox';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '../utils/userContext';
+import Popup from './PostPopup';
 
-const Post = () => {
-  const [posts, setPosts] = useState('');
-
-  const makePost = (e) => {
-    e.preventDefault();
-    const temp = { post: posts };
-
-    axios
-      .post('http://localhost:4000/api/posts', temp, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+const CreatePost = () => {
+  const [isOpen, setIsopen] = useState(false);
+  const { subreddit } = useContext(UserContext);
+  const toggle = () => {
+    setIsopen(!isOpen);
   };
+
   return (
-    <div>
-      <p>Post</p>
-      <form onSubmit={(e) => makePost(e)}>
-        <InputBox type="text" handleClick={(e) => setPosts(e.target.value)} />
-        <InputBox type="submit" name="click" />
-        <p>{posts}</p>
+    <>
+      <form>
+        <input type="button" onClick={toggle} value="Create Post" />
+        {isOpen && <Popup contents={subreddit} handleClose={toggle} />}
       </form>
-    </div>
+    </>
   );
 };
 
-export default Post;
+export default CreatePost;
