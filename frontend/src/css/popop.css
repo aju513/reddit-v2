@@ -19,6 +19,8 @@
   padding: 20px;
   border: 1px solid #999;
   overflow: auto;
+  display: grid;
+  justify-content: center;
 }
 
 .close-icon {
@@ -35,4 +37,9 @@
   text-align: center;
   border: 1px solid #999;
   font-size: 20px;
+}
+.textbox {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
 }

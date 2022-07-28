@@ -2,10 +2,10 @@ import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
-
+import '../css/nav.css';
 import { UserContext } from '../utils/userContext';
-import UserDropDownWithArray from './UseDropDownWithArray';
-import UserDropDown from './UserDropDown';
+import UserDropDownWithArray from './Dropdown/UseDropDownWithArray';
+import UserDropDown from './Dropdown/UserDropDown';
 function Navbars() {
   axios.defaults.withCredentials = true;
   const { user, setUser, subreddit, setSubreddit } = useContext(UserContext);
@@ -54,55 +54,68 @@ function Navbars() {
   };
   return (
     <>
-      {user.isLoggedIn ? (
-        <Nav className="ms-auto">
-          {subr && (
-            <Nav.Item classname=" ">
-              <Nav.Link>
-                <UserDropDownWithArray main={'Home'} properties={subr} />
-              </Nav.Link>
-            </Nav.Item>
-          )}
-          <Nav.Item classname="nav navbar-nav navbar-right ">
-            {user.username ? (
-              <UserDropDown
-                main={user.username}
-                properties={[
-                  { link: '#', name: 'Profile' },
-                  { link: '#', name: 'User Settings' },
-                  { name: 'Create Community', link: '/subreddit' },
-                ]}
-              />
-            ) : (
-              '...loading'
-            )}
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link>
-              {/* <Link to="/"> */}
-              <button onClick={() => callLogout()}>Logout</button>
-              {/* </Link> */}
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
-      ) : (
-        <Nav className="justify-content-end">
-          <Nav.Item>
-            <Nav.Link>
-              <Link style={{ textDecoration: 'none' }} to="/login">
-                Login
-              </Link>
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link>
-              <Link style={{ textDecoration: 'none' }} to="/register">
-                Register
-              </Link>
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
-      )}
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <Link
+          classname="nav-link"
+          style={{
+            textDecoration: 'none',
+            color: 'black',
+            margin: '20px',
+            fontSize: '20px',
+          }}
+          to="/ "
+        >
+          Reddit
+        </Link>
+        {user.isLoggedIn ? (
+          <div class="container-fluid">
+            <div
+              class="collapse navbar-collapse justify-content-end"
+              id="navbarNav"
+            >
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <UserDropDownWithArray main={'Home'} properties={subr} />
+                </li>
+                <UserDropDown
+                  main={user.username}
+                  properties={[
+                    { link: '#', name: 'Profile' },
+                    { link: '#', name: 'User Settings' },
+                    { name: 'Create Community', link: '/subreddit' },
+                  ]}
+                />
+
+                <li class="nav-item">
+                  <button className="logout" onClick={() => callLogout()}>
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        ) : (
+          <div class="container-fluid">
+            <div
+              class="collapse navbar-collapse justify-content-end"
+              id="navbarNav"
+            >
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <Link style={{ textDecoration: 'none' }} to="/login">
+                    Login
+                  </Link>
+                </li>
+                <li class="nav-item">
+                  <Link style={{ textDecoration: 'none' }} to="/register">
+                    Register
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </nav>
     </>
   );
 }

@@ -2,6 +2,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
+
 import Navbars from './components/Navbar';
 import { useState } from 'react';
 import { UserContext } from './utils/userContext';

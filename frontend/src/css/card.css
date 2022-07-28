@@ -1,8 +1,11 @@
 .container {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: -1;
   margin: 2rem;
 }
 .container::before {
-  content: '';
   width: 30%;
-  display: inline-block;
+  display: none;
 }
