@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import PostBox from '../components/Card';
 
 import CreatePost from '../components/Post/Post';
-import PostBox from '../components/Post/PostBox';
 import { UserContext } from '../utils/userContext';
 axios.defaults.withCredentials = true;
 const Home = () => {
