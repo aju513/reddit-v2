@@ -1,23 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../utils/userContext';
-const UserDropDownWithArray = ({ main, properties }) => {
-  const { setCurrentSubreddit } = useContext(UserContext);
+import { UserContext } from '../../utils/userContext';
+const UseDropDownWithPopup = ({ main, properties, setContent }) => {
+  const [selected, setSelected] = useState('');
   return (
     <div>
       {' '}
       <Dropdown>
         <Dropdown.Toggle variant="success" id="dropdown-basic">
-          {main}
+          {selected ? selected : main}
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
           {properties.map((object) => (
             <Dropdown.Item
               onClick={(e) => {
-                console.log(e.target.innerHTML);
-                setCurrentSubreddit(e.target.innerHTML);
+                setSelected(e.target.innerHTML);
+                setContent(e.target.innerHTML);
               }}
             >
               {object}
@@ -29,4 +29,4 @@ const UserDropDownWithArray = ({ main, properties }) => {
   );
 };
 
-export default UserDropDownWithArray;
+export default UseDropDownWithPopup;

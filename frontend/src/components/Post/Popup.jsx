@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import '../css/popop.css';
-import { UserContext } from '../utils/userContext';
+import '../../css/popop.css';
+import { UserContext } from '../../utils/userContext';
+import UseDropDownWithPopup from '../Dropdown/UseDropdownWithPopup';
 const Popup = ({ contents, handleClose }) => {
-  const { user } = useContext(UserContext);
+  const { user, subreddit } = useContext(UserContext);
   axios.defaults.withCredentials = true;
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const makePost = (e, obj) => {
-    e.preventDefault();
     const temp = {
       post: { title: title, content: content },
       name: obj,
@@ -34,8 +34,14 @@ const Popup = ({ contents, handleClose }) => {
         <span className="close-icon" onClick={handleClose}>
           x
         </span>
-        <form>
+        <h2>Create Post</h2>
+        <form
+          onSubmit={(e) => {
+            makePost(e, content);
+          }}
+        >
           <input
+            className="textbox"
             type="text"
             placeholder="title"
             onChange={(e) => {
@@ -43,13 +49,17 @@ const Popup = ({ contents, handleClose }) => {
             }}
           />
           <input
+            className="textbox"
             type="text"
             placeholder="text"
             onChange={(e) => setContent(e.target.value)}
           />
-          {contents.map((obj) => (
-            <button onClick={(e) => makePost(e, obj)}>{obj}</button>
-          ))}
+          <UseDropDownWithPopup
+            main={'Select Subreddit'}
+            properties={subreddit}
+            setContent={setContent}
+          />
+
           <input type="submit" value="create" />
         </form>
       </div>

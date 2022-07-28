@@ -1,0 +1,12 @@
+.createpost {
+  color: white;
+  background-color: green;
+  border-radius: 5px;
+  border-style: none;
+  padding: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 20px;
+  margin-top: 20px;
+  cursor: pointer;
+}

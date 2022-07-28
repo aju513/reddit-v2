@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import CreatePost from '../components/Post';
-import PostBox from '../components/PostBox';
+
+import CreatePost from '../components/Post/Post';
+import PostBox from '../components/Post/PostBox';
 import { UserContext } from '../utils/userContext';
 axios.defaults.withCredentials = true;
 const Home = () => {
@@ -30,7 +31,7 @@ const Home = () => {
   return (
     <div>
       <CreatePost />
-      Home
+
       {data ? (
         data.map((obj) => (
           <PostBox title={obj.post.title} content={obj.post.content} />
