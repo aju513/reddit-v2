@@ -23,5 +23,6 @@ router.get('/posts', post.getAllPost);
 router.post('/posts', post.createPost);
 router.get('/isLoggedIn', isLoggedIn);
 router.post('/subreddit', subreddit.createSubreddit);
+router.post('/upvote', post.upVote);
 router.get('/userSubreddits', user.userJoinedSubreddit);
 module.exports = router;

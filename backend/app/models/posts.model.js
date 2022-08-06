@@ -13,6 +13,22 @@ const Post = mongoose.model(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Subreddit',
       },
+      voteBalance: {
+        type: Number,
+        default: 0,
+      },
+      votes: [
+        {
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+          },
+          upvote: {
+            type: Boolean,
+            required: true,
+          },
+        },
+      ],
     },
     { timestamps: { createdAt: 'created_at' } }
   )
