@@ -17,8 +17,6 @@ const Subreddit = () => {
     }
   }, [name]);
   const createSubreddit = () => {
-    console.log('yes');
-
     axios
       .post(
         'http://localhost:4000/api/subreddit',
@@ -32,7 +30,6 @@ const Subreddit = () => {
       )
       .then((response) => {
         // <Alert variant="success">{data.subreddit.message}</Alert>;
-        console.log(response);
         if (response.status === 200) {
           ///need to make changes make separate page for your created subreddit page
           navigate('/');

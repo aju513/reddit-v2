@@ -10,7 +10,6 @@ const userJoinedSubreddit = (req, res) => {
     .then(({ userJoinedSubReddit }) => {
       userJoinedSubReddit.forEach(function (arrayItem) {
         response.push(arrayItem.name);
-        console.log(arrayItem.name);
       });
 
       res.send({ joinedSubreddit: response });

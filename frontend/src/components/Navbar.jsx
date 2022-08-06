@@ -10,8 +10,7 @@ function Navbars() {
   axios.defaults.withCredentials = true;
   const { user, setUser, subreddit, setSubreddit } = useContext(UserContext);
   const [subr, setSubr] = useState([]);
-  console.log('subreddit', subreddit);
-  console.log(user.username, user.isLoggedIn);
+
   useEffect(() => {
     checkIsLoggedIn();
   }, []);
@@ -23,7 +22,6 @@ function Navbars() {
     axios
       .get('http://localhost:4000/api/userSubreddits')
       .then((response) => {
-        console.log('go', response.data.joinedSubreddit);
         setSubr(response.data.joinedSubreddit);
         setSubreddit(response.data.joinedSubreddit);
       })
