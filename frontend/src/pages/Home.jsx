@@ -39,7 +39,7 @@ const Home = () => {
           username={e.user.username}
           content={e.post.content}
           id={e._id}
-          subreddit={subreddit.name}
+          subreddit={e.subreddit.name}
           userId={userId}
           voteBalance={e.voteBalance}
           upvoteState={e.votes ? e.votes : null}
