@@ -36,8 +36,10 @@ const Home = () => {
       {data.map((e) => (
         <PostBox
           title={e.post.title}
+          username={e.user.username}
           content={e.post.content}
           id={e._id}
+          subreddit={subreddit.name}
           userId={userId}
           voteBalance={e.voteBalance}
           upvoteState={e.votes ? e.votes : null}

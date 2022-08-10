@@ -11,7 +11,7 @@ const Subreddit = db.subreddit;
 
 const createPost = async (req, res) => {
   //send request name for subreddit and username that is stored in userContext.
-
+  const accessToken = req.cookies.qid;
   Subreddit.findOne({ name: req.body.name }, (err, obj) => {
     if (obj) {
       const postByUser = new Post({
@@ -50,23 +50,31 @@ const getAllPost = (req, res) => {
   const userId = parseJwt(accessToken).id;
 
   if (!req.query.current) {
-    Post.find({}, (err, obj) => {
-      res.send({ post: obj, userId: userId });
-    });
+    Post.find({})
+      .populate('user')
+      .populate('subreddit')
+      .exec((err, obj) => {
+        console.log(obj);
+
+        res.send({ post: obj, userId: userId });
+      });
   } else if (req.query.current) {
     Subreddit.findOne({ name: req.query.current })
-      .populate('post')
+      .populate('user')
+      .populate('subreddit')
       .exec((err, obj) => {
         res.send({ post: obj.post, userId: userId });
       });
   }
 };
 const upVote = (req, res) => {
+  //some initialization
   const upVote = req.body.upvote;
   const postId = req.body.postId;
   const accessToken = req.cookies.qid;
   const userId = parseJwt(accessToken).id;
 
+  //check if there is a post inside votes of array to see if the user exist
   Post.findOne(
     {
       _id: ObjectId(postId),
@@ -74,12 +82,14 @@ const upVote = (req, res) => {
     },
 
     function (err, review) {
+      //if user of votes userid==null
       if (!review) {
         Post.findOne(
           {
             _id: ObjectId(postId),
           },
           (err, review) => {
+            //soem incremental and decremental logic just to make sure zero doesnot appear
             if (review.voteBalance === -1 && upVote == true) {
               var updateNew = {
                 $addToSet: { votes: { userId: userId, upvote: upVote } },
@@ -101,6 +111,7 @@ const upVote = (req, res) => {
                 $inc: { voteBalance: -1 },
               };
             }
+            //updata the post with new userid and votecount
             Post.findOneAndUpdate(
               { _id: ObjectId(postId) },
               updateNew,
@@ -117,7 +128,9 @@ const upVote = (req, res) => {
             );
           }
         );
+        //if user exist
       } else {
+        //some incremental decremental logic
         if (review.voteBalance === -1 && upVote == true) {
           var update = {
             $set: { 'votes.$.upvote': upVote },
@@ -139,11 +152,11 @@ const upVote = (req, res) => {
             $inc: { voteBalance: -1 },
           };
         }
+        //update the new value  i.e increment or decrement
 
         Post.findOneAndUpdate(
           {
             _id: ObjectId(postId),
-
             votes: { $elemMatch: { userId: userId } },
           },
           update,
@@ -153,7 +166,6 @@ const upVote = (req, res) => {
             if (err) {
               return res.status(500).send();
             }
-
             res
               .status(200)
               .send({ upvote: !!upVote, voteBalance: obj.voteBalance });

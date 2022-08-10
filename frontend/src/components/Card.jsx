@@ -6,11 +6,24 @@ import { Box } from '@mui/material';
 import { FaBeer, FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
-const PostBox = ({ userId, title, content, id, voteBalance, upvoteState }) => {
+const PostBox = ({
+  userId,
+  title,
+  content,
+  id,
+  voteBalance,
+  upvoteState,
+  username,
+  subreddit,
+}) => {
+  //just take only the upvote from the logged in user
   const requiredValue = upvoteState.filter((i) => i.userId === userId);
-
   var something = requiredValue.length !== 0 ? requiredValue[0].upvote : null;
   const [vote, setVote] = useState(voteBalance);
+
+  //if the something ==null then we can do both
+  //if the something ==true then that means only downvote button works
+  //if the something ==false then that means onlly upvote button works
   const [state, setState] = useState(something);
 
   const changeUpvote = (upvote) => {
@@ -47,6 +60,13 @@ const PostBox = ({ userId, title, content, id, voteBalance, upvoteState }) => {
         >
           <IconButton
             children={<FaArrowUp />}
+            color={
+              state === null
+                ? 'default'
+                : state === true
+                ? 'primary'
+                : 'default'
+            }
             onClick={() => {
               if (state === false || state === null) {
                 console.log('yes');
@@ -57,6 +77,13 @@ const PostBox = ({ userId, title, content, id, voteBalance, upvoteState }) => {
 
           <p style={{ marginBottom: '0px', fontSize: '1.2rem' }}>{vote}</p>
           <IconButton
+            color={
+              state === null
+                ? 'default'
+                : state === false
+                ? 'warning'
+                : 'default'
+            }
             children={<FaArrowDown />}
             onClick={() => {
               if (state === true || state === null) {
@@ -66,6 +93,12 @@ const PostBox = ({ userId, title, content, id, voteBalance, upvoteState }) => {
           />
         </div>
         <CardContent>
+          <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
+            Posted by {username}
+          </Typography>
+          <Typography sx={{ fontSize: 10 }} color="text.secondary" gutterBottom>
+            Subreddit {subreddit}
+          </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             {title}
           </Typography>
