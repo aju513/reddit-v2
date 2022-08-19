@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/material';
 import { FaBeer, FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import axios from 'axios';
+
 axios.defaults.withCredentials = true;
 const PostBox = ({
   userId,

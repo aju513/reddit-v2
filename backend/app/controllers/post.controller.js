@@ -123,7 +123,7 @@ const upVote = (req, res) => {
                 }
                 res
                   .status(200)
-                  .send({ upvote: !!upVote, voteBalance: review.voteBalance });
+                  .send({ upvote: null, voteBalance: review.voteBalance });
               }
             );
           }

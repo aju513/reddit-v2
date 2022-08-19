@@ -6,7 +6,7 @@ const {
   register,
 } = require('../middleware/');
 
-const { auth, post, subreddit, user } = require('../controllers');
+const { comment, auth, post, subreddit, user } = require('../controllers');
 const { isLoggedIn } = require('../middleware/isLoggedIn');
 
 //auth routes
@@ -21,6 +21,8 @@ router.get('/logout', auth.logout);
 //display routes
 router.get('/posts', post.getAllPost);
 router.post('/posts', post.createPost);
+router.post('/comment', comment.createComment);
+router.get('/comment', comment.getComment);
 router.get('/isLoggedIn', isLoggedIn);
 router.post('/subreddit', subreddit.createSubreddit);
 router.post('/upvote', post.upVote);
