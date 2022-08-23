@@ -7,10 +7,11 @@ const Popup = ({ contents, handleClose }) => {
   const { user, subreddit } = useContext(UserContext);
   axios.defaults.withCredentials = true;
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [subredditName, setSubredditName] = useState('');
+  const [text, setText] = useState('');
   const makePost = (e, obj) => {
     const temp = {
-      post: { title: title, content: content },
+      post: { title: title, content: text },
       name: obj,
       username: user.username,
     };
@@ -37,7 +38,7 @@ const Popup = ({ contents, handleClose }) => {
         <h2>Create Post</h2>
         <form
           onSubmit={(e) => {
-            makePost(e, content);
+            makePost(e, subredditName);
           }}
         >
           <input
@@ -52,12 +53,14 @@ const Popup = ({ contents, handleClose }) => {
             className="textbox"
             type="text"
             placeholder="text"
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value);
+            }}
           />
           <UseDropDownWithPopup
             main={'Select Subreddit'}
             properties={subreddit}
-            setContent={setContent}
+            setContent={setSubredditName}
           />
 
           <input type="submit" value="create" />
