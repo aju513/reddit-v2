@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import '../css/card.css';
 import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/material';
 import { FaBeer, FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import axios from 'axios';
+import Comments from './comment/Comments';
+import { UserContext } from '../utils/userContext';
 
 axios.defaults.withCredentials = true;
 const PostBox = ({
@@ -17,6 +19,18 @@ const PostBox = ({
   username,
   subreddit,
 }) => {
+  const { backendComments, setBackendComments, fetchComment, setFetchComment } =
+    useContext(UserContext);
+  useEffect(() => {
+    axios
+      .get('http://localhost:4000/api/comment')
+      .then((obj) => {
+        setBackendComments(obj.data);
+      })
+      .finally(() => {
+        setFetchComment(false);
+      });
+  }, [fetchComment]);
   //just take only the upvote from the logged in user
   const requiredValue = upvoteState.filter((i) => i.userId === userId);
   var something = requiredValue.length !== 0 ? requiredValue[0].upvote : null;
@@ -108,6 +122,7 @@ const PostBox = ({
             {content}
           </Typography>
         </CardContent>
+        <Comments userId={userId} postId={id} />
       </Card>
     </>
   );

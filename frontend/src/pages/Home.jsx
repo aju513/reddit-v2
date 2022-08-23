@@ -22,7 +22,6 @@ const Home = () => {
         }
       )
       .then((response) => {
-        console.log(response.data.post);
         setData(response.data.post);
         setUserid(response.data.userId);
       })
@@ -35,6 +34,7 @@ const Home = () => {
 
       {data.map((e) => (
         <PostBox
+          key={e._id}
           title={e.post.title}
           username={e.user.username}
           content={e.post.content}

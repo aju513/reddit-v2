@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
@@ -52,9 +54,9 @@ function Navbars() {
   };
   return (
     <>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link
-          classname="nav-link"
+          className="nav-link"
           style={{
             textDecoration: 'none',
             color: 'black',
@@ -66,16 +68,21 @@ function Navbars() {
           Reddit
         </Link>
         {user.isLoggedIn ? (
-          <div class="container-fluid">
+          <div className="container-fluid">
             <div
-              class="collapse navbar-collapse justify-content-end"
+              className="collapse navbar-collapse justify-content-end"
               id="navbarNav"
             >
-              <ul class="navbar-nav">
-                <li class="nav-item">
-                  <UserDropDownWithArray main={'Home'} properties={subr} />
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <UserDropDownWithArray
+                    key={uuid()}
+                    main={'Home'}
+                    properties={subr}
+                  />
                 </li>
                 <UserDropDown
+                  key={uuid()}
                   main={user.username}
                   properties={[
                     { link: '#', name: 'Profile' },
@@ -84,7 +91,7 @@ function Navbars() {
                   ]}
                 />
 
-                <li class="nav-item">
+                <li className="nav-item">
                   <button className="logout" onClick={() => callLogout()}>
                     Logout
                   </button>
@@ -93,18 +100,18 @@ function Navbars() {
             </div>
           </div>
         ) : (
-          <div class="container-fluid">
+          <div className="container-fluid">
             <div
-              class="collapse navbar-collapse justify-content-end"
+              className="collapse navbar-collapse justify-content-end"
               id="navbarNav"
             >
-              <ul class="navbar-nav">
-                <li class="nav-item">
+              <ul className="navbar-nav">
+                <li className="nav-item">
                   <Link style={{ textDecoration: 'none' }} to="/login">
                     Login
                   </Link>
                 </li>
-                <li class="nav-item">
+                <li className="nav-item">
                   <Link style={{ textDecoration: 'none' }} to="/register">
                     Register
                   </Link>
