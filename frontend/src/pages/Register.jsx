@@ -1,13 +1,13 @@
-import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { UserContext } from '../utils/userContext';
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { UserContext } from "../utils/userContext";
 const Register = () => {
   axios.defaults.withCredentials = true;
   //
   const [value, setvalue] = useState({});
-  const [errorFromServer, setErrorFromServer] = useState('');
+  const [errorFromServer, setErrorFromServer] = useState("");
   const [status, setStatus] = useState(false);
   const navigate = useNavigate();
   const {
@@ -15,14 +15,14 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setFetchSubreddit } = useContext(UserContext);
   //
 
   useEffect(() => {
     if (Object.keys(value).length !== 0) {
       callAxios();
     }
-    const goToHomePage = () => navigate('/');
+    const goToHomePage = () => navigate("/");
 
     if (status) {
       goToHomePage();
@@ -34,22 +34,23 @@ const Register = () => {
     console.log(errors);
     axios
       .post(
-        'http://localhost:4000/api/register',
+        "http://localhost:4000/api/register",
 
         value,
         {
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
         }
       )
       .then(function (response) {
         console.log(response);
+        setFetchSubreddit(true);
         if (response.status === 200) {
           setStatus(true);
         }
         setUser(response.data.user);
-        setErrorFromServer('');
+        setErrorFromServer("");
       })
       .catch(function (error) {
         console.log(error.response);
@@ -71,25 +72,25 @@ const Register = () => {
       >
         {errorFromServer && <p>{errorFromServer}</p>}
         <input
-          {...register('username', {
-            required: 'username should not be empty',
+          {...register("username", {
+            required: "username should not be empty",
           })}
           type="text"
         />
         <p>{errors.username && <>{errors.username.message}</>}</p>
 
         <input
-          {...register('email', { required: 'Email should not be empty' })}
+          {...register("email", { required: "Email should not be empty" })}
           type="text"
         />
         <p>{errors.email && <>{errors.email.message}</>}</p>
 
         <input
-          {...register('password', {
-            required: 'Password Should Not Be Empyty',
+          {...register("password", {
+            required: "Password Should Not Be Empyty",
             minLength: {
               value: 8,
-              message: 'The length of password should be more than 8',
+              message: "The length of password should be more than 8",
             },
           })}
           type="password"
