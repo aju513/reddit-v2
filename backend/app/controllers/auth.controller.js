@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
 const register = (req, res) => {
-  console.log(req.body);
 
   const user = new User({
     email: req.body.email,
@@ -38,7 +37,6 @@ const login = async (req, res, next) => {
     } else if (userObj) {
       bcrypt.compare(req.body.password, userObj.password).then((match) => {
         if (!match) {
-          console.log('userObj.password');
           res.status(404).send({
             error: 'Wrong Username and Password Combination!',
             errortype: 'Password',
@@ -52,7 +50,6 @@ const login = async (req, res, next) => {
           res.cookie('qid', accessToken, {
             maxAge: 60 * 60 * 24 * 30 * 1000,
           });
-          console.log(req.cookies['qid']);
           res.send({
             user: {
               username: userObj.username,

@@ -54,7 +54,6 @@ const getAllPost = (req, res) => {
       .populate('user')
       .populate('subreddit')
       .exec((err, obj) => {
-        console.log(obj);
 
         res.send({ post: obj, userId: userId });
       });
@@ -123,7 +122,7 @@ const upVote = (req, res) => {
                 }
                 res
                   .status(200)
-                  .send({ upvote: null, voteBalance: review.voteBalance });
+                  .send({ upvote: !!upVote, voteBalance: review.voteBalance });
               }
             );
           }

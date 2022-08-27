@@ -28,7 +28,6 @@ const usernameChecker = (req, res, next) => {
 };
 const verifyJwt = (req, res, next) => {
   const accessToken = req.cookies['access-token'];
-  console.log(accessToken);
   if (!accessToken) {
     res.status(400).send({ isLoggedIn: false });
   }

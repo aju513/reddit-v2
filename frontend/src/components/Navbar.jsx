@@ -1,39 +1,47 @@
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
-import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
-import Nav from 'react-bootstrap/Nav';
-import { Link } from 'react-router-dom';
-import '../css/nav.css';
-import { UserContext } from '../utils/userContext';
-import UserDropDownWithArray from './Dropdown/UseDropDownWithArray';
-import UserDropDown from './Dropdown/UserDropDown';
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
+import "../css/nav.css";
+import { UserContext } from "../utils/userContext";
+import UserDropDownWithArray from "./Dropdown/UseDropDownWithArray";
+import UserDropDown from "./Dropdown/UserDropDown";
 function Navbars() {
   axios.defaults.withCredentials = true;
-  const { user, setUser, subreddit, setSubreddit } = useContext(UserContext);
+  const {
+    user,
+    setUser,
+    subreddit,
+    setSubreddit,
+    fetchSubreddit,
+    setFetchSubreddit,
+  } = useContext(UserContext);
   const [subr, setSubr] = useState([]);
 
   useEffect(() => {
     checkIsLoggedIn();
   }, []);
-  useEffect(() => {
-    callSubreddit();
-  }, [user]);
 
-  const callSubreddit = () => {
+  useEffect(() => {
     axios
-      .get('http://localhost:4000/api/userSubreddits')
+      .get("http://localhost:4000/api/userSubreddits")
       .then((response) => {
         setSubr(response.data.joinedSubreddit);
         setSubreddit(response.data.joinedSubreddit);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setFetchSubreddit(false);
       });
-  };
+  }, [fetchSubreddit]);
+
   const callLogout = () => {
     axios
-      .get('http://localhost:4000/api/logout')
+      .get("http://localhost:4000/api/logout")
       .then((response) => {
         setUser(response.data.user);
       })
@@ -43,7 +51,7 @@ function Navbars() {
   };
   const checkIsLoggedIn = () => {
     axios
-      .get('http://localhost:4000/api/isLoggedIn')
+      .get("http://localhost:4000/api/isLoggedIn")
       .then((response) => {
         setUser(response.data.user);
       })
@@ -58,10 +66,10 @@ function Navbars() {
         <Link
           className="nav-link"
           style={{
-            textDecoration: 'none',
-            color: 'black',
-            margin: '20px',
-            fontSize: '20px',
+            textDecoration: "none",
+            color: "black",
+            margin: "20px",
+            fontSize: "20px",
           }}
           to="/ "
         >
@@ -77,7 +85,7 @@ function Navbars() {
                 <li className="nav-item">
                   <UserDropDownWithArray
                     key={uuid()}
-                    main={'Home'}
+                    main={"Home"}
                     properties={subr}
                   />
                 </li>
@@ -85,9 +93,9 @@ function Navbars() {
                   key={uuid()}
                   main={user.username}
                   properties={[
-                    { link: '#', name: 'Profile' },
-                    { link: '#', name: 'User Settings' },
-                    { name: 'Create Community', link: '/subreddit' },
+                    { link: "#", name: "Profile" },
+                    { link: "#", name: "User Settings" },
+                    { name: "Create Community", link: "/subreddit" },
                   ]}
                 />
 
@@ -107,12 +115,12 @@ function Navbars() {
             >
               <ul className="navbar-nav">
                 <li className="nav-item">
-                  <Link style={{ textDecoration: 'none' }} to="/login">
+                  <Link style={{ textDecoration: "none" }} to="/login">
                     Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link style={{ textDecoration: 'none' }} to="/register">
+                  <Link style={{ textDecoration: "none" }} to="/register">
                     Register
                   </Link>
                 </li>

@@ -1,30 +1,31 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const {
   login,
   authJwt,
   subredditChecker,
   register,
-} = require('../middleware/');
+} = require("../middleware/");
 
-const { comment, auth, post, subreddit, user } = require('../controllers');
-const { isLoggedIn } = require('../middleware/isLoggedIn');
+const { comment, auth, post, subreddit, user } = require("../controllers");
+const { isLoggedIn } = require("../middleware/isLoggedIn");
 
 //auth routes
-router.post('/login', login.emailChecker, auth.login);
+router.post("/login", login.emailChecker, auth.login);
 router.post(
-  '/register',
+  "/register",
   register.emailChecker,
   register.usernameChecker,
   auth.register
 );
-router.get('/logout', auth.logout);
+router.get("/logout", auth.logout);
 //display routes
-router.get('/posts', post.getAllPost);
-router.post('/posts', post.createPost);
-router.post('/comment', comment.createComment);
-router.get('/comment', comment.getComment);
-router.get('/isLoggedIn', isLoggedIn);
-router.post('/subreddit', subreddit.createSubreddit);
-router.post('/upvote', post.upVote);
-router.get('/userSubreddits', user.userJoinedSubreddit);
+router.get("/posts", post.getAllPost);
+router.post("/posts", post.createPost);
+router.post("/comment", comment.createComment);
+router.get("/comment", comment.getComment);
+router.get("/isLoggedIn", isLoggedIn);
+router.post("/subreddit", subreddit.createSubreddit);
+router.post("/upvote", post.upVote);
+router.get("/userSubreddits", user.userJoinedSubreddit);
+router.get("/subreddit", subreddit.getAllSubreddit);
 module.exports = router;

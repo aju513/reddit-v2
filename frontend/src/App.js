@@ -1,21 +1,22 @@
-import Login from './pages/Login';
-import Register from './pages/Register';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
-import './css/comment.css';
-import Navbars from './components/Navbar';
-import { useState } from 'react';
-import { UserContext } from './utils/userContext';
-import Home from './pages/Home';
-import Subreddit from './pages/Subreddit';
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.css";
+import "./css/comment.css";
+import Navbars from "./components/Navbar";
+import { useState } from "react";
+import { UserContext } from "./utils/userContext";
+import Home from "./pages/Home";
+import Subreddit from "./pages/Subreddit";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [subreddit, setSubreddit] = useState([]);
   const [backendComments, setBackendComments] = useState([]);
-  const [currentSubreddit, setCurrentSubreddit] = useState('');
+  const [currentSubreddit, setCurrentSubreddit] = useState("");
   const [fetchComment, setFetchComment] = useState(true);
+  const [fetchSubreddit, setFetchSubreddit] = useState(true);
   return (
     <div>
       <BrowserRouter>
@@ -33,6 +34,8 @@ function App() {
             setBackendComments,
             fetchComment,
             setFetchComment,
+            fetchSubreddit,
+            setFetchSubreddit,
           }}
         >
           <Navbars />
